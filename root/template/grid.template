@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+
+{{ $partitions := .Partitions    }}
+{{ $fileCount  := .FileCount }}
+
+{{ $textWidth  := 400 }}
+{{ $textOffset := 16  }}
+{{ $boxWidth   := 20  }}
+{{ $boxHeight  := 20  }}
+
+{{ $gridWidth  := multiply $fileCount $boxWidth }}
+{{ $gridHeight := multiply $fileCount $boxHeight }}
+
+width="{{ add $textWidth $gridWidth }}" height="{{ $gridHeight }}"
+
+>
+
+{{range .Partitions}}
+  {{range .Groups}}
+    {{ $fingerprint := .CyclicFingerprint }}
+    {{ $rowMultipleFiles := gt .FileCount 1 }}
+    {{range .Files}}
+      {{ $file := . }}
+      {{ $y := multiply $file.Index $boxHeight }}
+      <rect x="0" y="{{ $y }}" height="{{ $boxHeight }}" width="{{ $textWidth }}" style="stroke:lightgrey; fill:white" />
+      <text x="4" y="{{ add $y $textOffset }}"
+        {{if $rowMultipleFiles }}
+          style="fill:red"
+        {{else}}
+          style="fill:black"
+        {{end}}
+      >{{ trimPrefix .Name }}</text>
+      {{range $partitions}} 
+        {{range .Groups}} 
+          {{ $fingerprintMatch := eq $fingerprint .CyclicFingerprint }}
+          {{ $multipleFiles := gt .FileCount 1 }}
+          {{range .Files}}
+            {{ $xOffset := multiply .Index $boxWidth }}
+            {{ $x       := add $textWidth $xOffset }}
+            <rect x="{{ $x }}" y="{{ $y }}" height="{{ $boxHeight }}" width="{{ $boxWidth }}"
+            {{if isDependency $file .}}
+              {{if and $fingerprintMatch $multipleFiles }}
+                style="stroke:lightgrey; fill:red"
+              {{else}}
+                style="stroke:lightgrey; fill:black"
+              {{end}}
+            {{else}}
+                style="stroke:lightgrey; fill:white"
+            {{end}}
+            />
+          {{end}}
+        {{end}}
+      {{end}}
+    {{end}}
+  {{end}}
+
+  {{ $partitionXOffset := multiply .LowestIndex $boxWidth }}
+  {{ $partitionX       := add $textWidth $partitionXOffset }}
+  {{ $partitionY       := multiply .LowestIndex $boxHeight }}
+  {{ $partitionWidth   :=  multiply .FileCount $boxWidth }}
+  {{ $partitionHeight  :=  multiply .FileCount $boxHeight }}
+  <rect x="{{ add $partitionX 2 }}" y="{{ add $partitionY 2 }}" height="{{ add $partitionHeight -4 }}" width="{{ add $partitionWidth -4 }}" style="stroke:black; stroke-width:4; fill-opacity: .0" />
+
+{{end}}
+
+</svg>

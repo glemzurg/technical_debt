@@ -1,0 +1,9 @@
+{
+	"Gopath": "/absolute/path/to/target/repo",
+	"Paths": [
+		"glemzurg"
+	],
+	"RootPath": "/path/to/technical_debt/root",
+	"View": "core-periphery",
+	"IncludeTests": false
+}

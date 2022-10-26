@@ -1,0 +1,15 @@
+# Compiled files.
+go/bin
+go/pkg
+
+# Generated files.
+root/output
+
+# Third-party src.
+go/src/gopkg.in
+go/src/github.com
+
+# Output from TLA processes.
+junk
+tla/states
+tla/pdf

@@ -1,0 +1,9 @@
+{
+	"Gopath": "/absolute/src/path",
+	"Paths": [
+		"glemzurg"
+	],
+	"RootPath": "/path/to/here/technical_debt/root",
+	"View": "median",
+	"IncludeTests": false
+}
